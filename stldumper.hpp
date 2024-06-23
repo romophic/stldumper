@@ -5,7 +5,7 @@
 //  |___/\__|_|\__,_|\__,_|_| |_| |_| .__/ \___|_|     //
 //                                  |_|                //
 
-#include <ostream>
+#include <iostream>
 #include <vector>
 #include <deque>
 #include <list>
@@ -43,82 +43,66 @@ template <class T>
 ostream &operator<<(ostream &_ostr, const unordered_set<T> &_v);
 template <class T>
 ostream &operator<<(ostream &_ostr, const unordered_multiset<T> &_v);
-
 template <class T>
-void orange(ostream &_ostr, const T &_v) {
-  if (_v.size() == 0)
-    return;
-  _ostr << *_v.begin();
-  for (auto itr = next(_v.begin()); itr != _v.end(); itr++)
-    _ostr << " " << *itr;
+ostream &_orange(ostream &_ostr, const T &_v) {
+  _ostr << "[";
+  for (bool tr = true; auto &i : _v)
+    _ostr << (tr ? tr = false, "" : ", ") << i;
+  return _ostr << "]";
 }
 template <class T>
-ostream &operator<<(ostream &_ostr, const vector<T> &_v) {
-  orange(_ostr, _v);
-  return _ostr;
-}
+ostream &operator<<(ostream &_ostr, const vector<T> &_v) { return _orange(_ostr, _v); }
 template <class T>
-ostream &operator<<(ostream &_ostr, const deque<T> &_v) {
-  orange(_ostr, _v);
-  return _ostr;
-}
+ostream &operator<<(ostream &_ostr, const deque<T> &_v) { return _orange(_ostr, _v); }
 template <class T>
-ostream &operator<<(ostream &_ostr, const list<T> &_v) {
-  orange(_ostr, _v);
-  return _ostr;
-}
+ostream &operator<<(ostream &_ostr, const list<T> &_v) { return _orange(_ostr, _v); }
 template <class T, class Y>
-ostream &operator<<(ostream &_ostr, const pair<T, Y> &_v) {
-  _ostr << _v.first << " " << _v.second;
-  return _ostr;
-}
+ostream &operator<<(ostream &_ostr, const pair<T, Y> &_v) { return _ostr << "(" << _v.first << ", " << _v.second << ")"; }
 template <class... Ts>
 ostream &operator<<(ostream &_ostr, const tuple<Ts...> &_v) {
-  bool first = true;
-  apply([&_ostr, &first](auto &&... args) {
+  bool tr = true;
+  _ostr << "(";
+  apply([&_ostr, &tr](auto &&...args) {
     auto print = [&](auto &&val) {
-      if (!first)
-        _ostr << " ";
-      (_ostr << val);
-      first = false;
+      if (!tr)
+        _ostr << ", ";
+      _ostr << val;
+      tr = false;
     };
     (print(args), ...);
   },
         _v);
-  return _ostr;
+  return _ostr << ")";
 }
 template <class T, class Y>
-ostream &operator<<(ostream &_ostr, const map<T, Y> &_v) {
-  orange(_ostr, _v);
-  return _ostr;
-}
+ostream &operator<<(ostream &_ostr, const map<T, Y> &_v) { return _orange(_ostr, _v); }
 template <class T, class Y>
-ostream &operator<<(ostream &_ostr, const multimap<T, Y> &_v) {
-  orange(_ostr, _v);
-  return _ostr;
-}
+ostream &operator<<(ostream &_ostr, const multimap<T, Y> &_v) { return _orange(_ostr, _v); }
 template <class T, class Y>
-ostream &operator<<(ostream &_ostr, const unordered_map<T, Y> &_v) {
-  orange(_ostr, _v);
-  return _ostr;
+ostream &operator<<(ostream &_ostr, const unordered_map<T, Y> &_v) { return _orange(_ostr, _v); }
+template <class T>
+ostream &operator<<(ostream &_ostr, const set<T> &_v) { return _orange(_ostr, _v); }
+template <class T>
+ostream &operator<<(ostream &_ostr, const multiset<T> &_v) { return _orange(_ostr, _v); }
+template <class T>
+ostream &operator<<(ostream &_ostr, const unordered_set<T> &_v) { return _orange(_ostr, _v); }
+template <class T>
+ostream &operator<<(ostream &_ostr, const unordered_multiset<T> &_v) { return _orange(_ostr, _v); }
+template <class T>
+istream &operator>>(istream &_istr, vector<T> &_v);
+template <class T>
+istream &operator>>(istream &_istr, deque<T> &_v);
+template <class T, class Y>
+istream &operator>>(istream &_istr, pair<T, Y> &_v);
+template <class T>
+istream &_irange(istream &_istr, T &_v) {
+  for (auto &i : _v)
+    _istr >> i;
+  return _istr;
 }
 template <class T>
-ostream &operator<<(ostream &_ostr, const set<T> &_v) {
-  orange(_ostr, _v);
-  return _ostr;
-}
+istream &operator>>(istream &_istr, vector<T> &_v) { return _irange(_istr, _v); }
 template <class T>
-ostream &operator<<(ostream &_ostr, const multiset<T> &_v) {
-  orange(_ostr, _v);
-  return _ostr;
-}
-template <class T>
-ostream &operator<<(ostream &_ostr, const unordered_set<T> &_v) {
-  orange(_ostr, _v);
-  return _ostr;
-}
-template <class T>
-ostream &operator<<(ostream &_ostr, const unordered_multiset<T> &_v) {
-  orange(_ostr, _v);
-  return _ostr;
-}
+istream &operator>>(istream &_istr, deque<T> &_v) { return _irange(_istr, _v); }
+template <class T, class Y>
+istream &operator>>(istream &_istr, pair<T, Y> &_v) { return _istr >> _v.first >> _v.second; }
